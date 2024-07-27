@@ -86,9 +86,9 @@ class AuthController extends BaseController
      */
     public function refresh()
     {
-        $success = $this->respondWithToken(auth()->refresh());
+        return $this->respondWithToken(auth()->refresh());
 
-        return $this->sendResponse($success, 'Refresh token return successfully.');
+        // return $this->sendResponse($success, 'Refresh token return successfully.');
     }
 
     /**
