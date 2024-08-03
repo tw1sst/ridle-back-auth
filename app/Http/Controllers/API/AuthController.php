@@ -24,7 +24,7 @@ class AuthController extends BaseController
             'c_password' => 'required|same:password',
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());
         }
 
@@ -52,7 +52,7 @@ class AuthController extends BaseController
 
         return $success = $this->respondWithToken($token);
 
-        // return $this->sendResponse($success, 'User login successfully.');
+        return $this->sendResponse($success, 'User login successfully.');
     }
 
     /**
@@ -86,7 +86,7 @@ class AuthController extends BaseController
      */
     public function refresh()
     {
-        return $this->respondWithToken(auth()->refresh());
+       return $this->respondWithToken(auth()->refresh());
 
         // return $this->sendResponse($success, 'Refresh token return successfully.');
     }
