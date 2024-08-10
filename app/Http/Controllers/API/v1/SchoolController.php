@@ -39,7 +39,37 @@ class SchoolController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $status = false;
+        $school = '';
+        $message = '';
+
+        $validatedData = $request->validate([
+            'name' => ['required', 'max:100'],
+            'description' => ['required', 'max:255'],
+            'nick_name' => ['required', 'unique:schools'],
+        ]);
+
+        if ($validatedData) {
+            try {
+                $school = new School;
+                $school->owner_id = Auth::user()->id;
+                $school->name = $request->name;
+                $school->nick_name = $request->nick_name;
+                $school->description = $request->description;
+                $school->save();
+
+                $status = true;
+                $message = 'Success';
+            } catch (Exception $e) {
+                $message = $e;
+            }
+        }
+
+        return response()->json([
+            "status" => $status,
+            "message" => $message,
+            "school" => $school,
+        ])->setStatusCode(200);
     }
 
     /**
@@ -80,6 +110,23 @@ class SchoolController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $status = false;
+        $message = '';
+
+        if ($school = School::find($id)) {
+            if ($school->owner_id == Auth::user()->id) {
+                $school->delete();
+
+                $status = true;
+                $message = 'Success';
+            } else {
+                $message = 'Permission Denied';
+            }
+        }
+
+        return response()->json([
+            "status" => $status,
+            "message" => $message,
+        ])->setStatusCode(200);
     }
 }
