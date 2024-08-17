@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\v1\UserController;
 use App\Http\Controllers\API\v1\SchoolController;
+use App\Http\Controllers\API\v1\PostController;
 
 Route::group([
     'middleware' => 'api',
@@ -32,4 +33,9 @@ Route::group([
     Route::get('/school/{id}', [SchoolController::class, 'show']);
     Route::put('/school/{id}', [SchoolController::class, 'update']);
     Route::delete('/school/{id}', [SchoolController::class, 'destroy']);
+
+    Route::get('/post', [PostController::class, 'index']);
+    Route::post('/post', [PostController::class, 'store']);
+    Route::delete('/post/{id}', [PostController::class, 'destroy']);
+    Route::get('/post/{id}', [PostController::class, 'show']);
 });

@@ -114,7 +114,7 @@ class SchoolController extends Controller
         $message = '';
 
         if ($school = School::find($id)) {
-            if ($school->owner_id == Auth::user()->id) {
+            if ($school->owner_id === Auth::user()->id) {
                 $school->delete();
 
                 $status = true;
@@ -122,6 +122,8 @@ class SchoolController extends Controller
             } else {
                 $message = 'Permission Denied';
             }
+        } else {
+            $message = 'School not found';
         }
 
         return response()->json([
