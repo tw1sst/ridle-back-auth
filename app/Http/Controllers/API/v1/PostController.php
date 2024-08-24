@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Models\UserFollow;
 use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
@@ -23,6 +24,17 @@ class PostController extends Controller
                 ['school_id', $request->school_id],
                 ['parent_id', '!==', 0],
             ])->with('user', 'childPosts')->orderBy('id', 'desc')->get()) {
+                foreach ($posts as $post) {
+                    $post->isFollow = false;
+                    if (UserFollow::where([
+                        ['user_id', Auth::user()->id],
+                        ['to_user_id', $post->user_id],
+                    ])->first()) {
+                       $post->isFollow = true;
+                    }
+                }
+
+                $post->isFollow = false;
                 $status = true;
                 $message = 'Success';
             }
@@ -90,6 +102,14 @@ class PostController extends Controller
 
         try {
             if ($post = Post::with('user', 'childPosts')->find($id)) {
+                $post->isFollow = false;
+                if (UserFollow::where([
+                    ['user_id', Auth::user()->id],
+                    ['to_user_id', $post->user_id],
+                ])->first()) {
+                   $post->isFollow = true;
+                }
+
                 $status = true;
                 $message = 'Success';
             }

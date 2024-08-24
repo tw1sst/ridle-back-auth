@@ -28,6 +28,9 @@ Route::group([
     Route::put('/user/{id}', [UserController::class, 'update']);
     Route::delete('/user/{id}', [UserController::class, 'destroy']);
 
+    Route::post('/user/follow', [UserController::class, 'follow']);
+    Route::post('/user/unfollow', [UserController::class, 'unfollow']);
+
     Route::get('/school', [SchoolController::class, 'index']);
     Route::post('/school', [SchoolController::class, 'store']);
     Route::get('/school/{id}', [SchoolController::class, 'show']);

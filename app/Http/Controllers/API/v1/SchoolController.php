@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\School;
+use App\Models\UserFollow;
 use Illuminate\Support\Facades\Auth;
 
 class SchoolController extends Controller
@@ -83,6 +84,14 @@ class SchoolController extends Controller
 
         try {
             if ($school = School::find($id)) {
+                $school->isFollow = false;
+                if (UserFollow::where([
+                    ['user_id', Auth::user()->id],
+                    ['to_school_id', $school->id],
+                ])->first()) {
+                   $school->isFollow = true;
+                }
+
                 $status = true;
                 $message = 'Success';
             }
